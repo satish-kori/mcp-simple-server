@@ -2,21 +2,30 @@
   "name": "mcp-test",
   "version": "1.0.0",
   "type": "module",
-  "main": "build/index.js",
+  "main": "build/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js",
-    "dev": "tsc && node build/index.js",
-    "test": "npm run build && node test-client.js",
-    "test:server": "node test-client.js"
+    "start": "node build/main.js",
+    "dev": "tsc && node build/main.js",
+    "test": "npm run build && jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:server": "node scripts/test-client.js",
+    "test:db": "node scripts/test-direct-db.js",
+    "test:schema": "node scripts/test-schema.js",
+    "test:db-schema": "node scripts/test-db-schema.js",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
   },
   "keywords": [
     "mcp",
-    "server"
+    "server",
+    "database",
+    "postgresql"
   ],
   "author": "",
   "license": "ISC",
-  "description": "A simple MCP server example",
+  "description": "A comprehensive MCP server with database integration",
   "dependencies": {
     "@google-cloud/cloud-sql-connector": "^1.8.3",
     "@modelcontextprotocol/sdk": "^1.17.4",
@@ -26,8 +35,34 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^24.3.0",
     "@types/pg": "^8.15.5",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.9.2"
+  },
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.d.ts"
+    ]
   }
 }

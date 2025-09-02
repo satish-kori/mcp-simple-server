@@ -1,9 +1,9 @@
 {
   "servers": {
-    "simple-demo-server": {
+    "sql-assistant-server": {
       "type": "stdio",
       "command": "node",
-      "args": ["build/index.js"]
+      "args": ["build/main.js"]
     }
   }
 }

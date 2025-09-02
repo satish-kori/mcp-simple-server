@@ -174,9 +174,9 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
 ```json
 {
   "mcpServers": {
-    "simple-demo-server": {
+    "sql-assistant-server": {
       "command": "node",
-      "args": ["/absolute/path/to/mcp-test/build/index.js"]
+      "args": ["/absolute/path/to/mcp-test/build/main.js"]
     }
   }
 }
@@ -228,16 +228,37 @@ mcp-test/
 │   ├── mcp.json         # MCP server config
 │   ├── tasks.json       # Build tasks
 │   └── launch.json      # Debug config
-├── src/
-│   └── index.ts         # Main server code with database integration
-├── build/
-│   └── index.js         # Compiled output
-├── test-client.js       # Test client for basic tools
-├── test-direct-db.js    # Direct database connection test
-├── test-db-schema.js    # Database schema testing
-├── test-schema.js       # Schema validation tests
-├── get-schema-count.js  # Schema counting utility
-├── .env                 # Database configuration (create from .env.example)
+├── src/                 # Source code (TypeScript)
+│   ├── main.ts          # Main server entry point
+│   ├── config/          # Configuration management
+│   │   └── database.ts  # Database configuration
+│   ├── database/        # Database layer
+│   │   ├── manager.ts   # Connection management
+│   │   └── query-service.ts # Query operations
+│   ├── tools/           # MCP tools implementation
+│   │   ├── calculator.ts    # Calculator tool
+│   │   ├── time.ts         # Time tool
+│   │   └── database-tools.ts # Database tools
+│   ├── types/           # TypeScript type definitions
+│   │   └── database.ts  # Database-related types
+│   └── utils/           # Utility functions
+│       └── query-utils.ts # Query formatting and analysis
+├── build/               # Compiled JavaScript output
+├── tests/               # Test files
+│   ├── unit/           # Unit tests
+│   │   ├── database.test.ts
+│   │   └── tools.test.ts
+│   └── integration/    # Integration tests
+│       └── mcp-server.test.ts
+├── scripts/             # Utility scripts
+│   ├── setup-dev.sh    # Development setup
+│   ├── test-direct-db.js    # Database connection test
+│   ├── test-db-schema.js    # Database schema testing
+│   ├── test-schema.js       # Schema validation tests
+│   └── get-schema-count.js  # Schema counting utility
+├── .env                 # Environment variables (create from .env.example)
+├── .eslintrc.js        # ESLint configuration
+├── Dockerfile          # Docker configuration
 ├── package.json
 ├── tsconfig.json
 └── README.md
