@@ -50,31 +50,31 @@ GOOGLE_CLOUD_PROJECT=your-project-id
 AI: "Get the database schema"
 → Returns all tables and their structures
 
-AI: "Show me the schema for the promotions table"
+AI: "Show me the schema for the customers table"
 → Returns detailed schema for specific table
 ```
 
 #### 2. Execute SQL Queries
 ```
-AI: "Execute SQL: SELECT COUNT(*) FROM promotions.promotion_t WHERE country_code = 'SE'"
+AI: "Execute SQL: SELECT COUNT(*) FROM customers.customer_t WHERE country_code = 'SE'"
 → Executes the query and returns results in table format
 
-AI: "Run this query in JSON format: SELECT promo_id, promo_code FROM promotions.promotion_t LIMIT 5"
+AI: "Run this query in JSON format: SELECT cutomer_id, customer_code FROM customers.customer_t LIMIT 5"
 → Returns results in JSON format
 ```
 
 #### 3. Natural Language Queries
 ```
-AI: "How many active promotions are there for Sweden?"
-→ Converts to SQL and executes: finds active promotions for SE market
+AI: "How many active customers are there for Sweden?"
+→ Converts to SQL and executes: finds active customers for SE market
 
-AI: "Show me all promotion types in the database"
+AI: "Show me all customer types in the database"
 → Automatically generates and runs appropriate SQL query
 ```
 
 #### 4. AI-Generated SQL
 ```
-AI: "Generate SQL to find all promotions that expire in the next 7 days"
+AI: "Generate SQL to find all customers that expire in the next 7 days"
 → Creates appropriate SQL query with explanation and executes it
 ```
 
@@ -210,13 +210,13 @@ AI: "Get the database schema"
 AI: "How many schemas are in the database?"
 → Executes: SELECT schema_name FROM information_schema.schemata
 
-AI: "Find all active promotions for Sweden"
-→ Generates and executes SQL to find SE market promotions
+AI: "Find all active customers for Sweden"
+→ Generates and executes SQL to find SE market customers
 
-AI: "Show me the structure of the promotions table"
-→ Returns detailed column information for promotions.promotion_t
+AI: "Show me the structure of the customers table"
+→ Returns detailed column information for customers.customer_t
 
-AI: "Execute SQL: SELECT COUNT(*) FROM promotions.promotion_t"
+AI: "Execute SQL: SELECT COUNT(*) FROM customers.customer_t"
 → Directly executes the SQL query and returns results
 ```
 

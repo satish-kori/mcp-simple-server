@@ -274,7 +274,7 @@ async function analyzeQuestionAndProvideSuggestions(question: string, suggestedT
 
 // Create our MCP server instance
 const server = new McpServer({
-  name: "simple-demo-server",
+  name: "postgre-mcp-server",
   version: "1.0.0",
   capabilities: {
     tools: {},
@@ -682,7 +682,7 @@ Configure database connection using environment variables:
 - Optional: DB_SSL, GOOGLE_CLOUD_PROJECT
 
 Server Details:
-- Name: simple-demo-server
+- Name: postgre-mcp-server
 - Version: 1.0.0
 - Language: TypeScript/Node.js
 - SDK: @modelcontextprotocol/sdk
