@@ -8,8 +8,88 @@ A demonstration MCP (Model Context Protocol) server built with TypeScript that p
 - **`get_current_time`** - Get the current date and time with optional timezone support
 - **`calculate`** - Perform basic mathematical operations (add, subtract, multiply, divide)
 
+#### Database Tools
+- **`get_database_schema`** - Get database schema information for all tables or a specific table
+- **`execute_sql_query`** - Execute SQL queries directly against the database with multiple output formats
+- **`execute_ai_generated_sql`** - Execute AI-generated SQL queries with explanations
+- **`natural_language_query`** - Convert natural language questions to SQL queries and execute them
+
 ### Resources
 - **`server_info`** - Information about the MCP server and its capabilities
+
+## 🗄️ Database Integration
+
+This MCP server includes powerful database integration capabilities with PostgreSQL/Google Cloud SQL support.
+
+### Database Configuration
+
+Configure your database connection using environment variables in `.env`:
+
+```bash
+# Google Cloud SQL Configuration
+DB_HOST=127.0.0.1
+DB_PORT=5445
+DB_NAME=your-database-name
+DB_USER=your-username
+DB_PASSWORD=your-password
+
+# For Cloud SQL Private IP (optional)
+INSTANCE_CONNECTION_NAME=your-project:region:instance-name
+
+# For SSL connection (recommended for production)
+DB_SSL=false
+
+# Google Cloud Project (if using IAM authentication)
+GOOGLE_CLOUD_PROJECT=your-project-id
+```
+
+### Database Tools Usage Examples
+
+#### 1. Get Database Schema
+```
+AI: "Get the database schema"
+→ Returns all tables and their structures
+
+AI: "Show me the schema for the promotions table"
+→ Returns detailed schema for specific table
+```
+
+#### 2. Execute SQL Queries
+```
+AI: "Execute SQL: SELECT COUNT(*) FROM promotions.promotion_t WHERE country_code = 'SE'"
+→ Executes the query and returns results in table format
+
+AI: "Run this query in JSON format: SELECT promo_id, promo_code FROM promotions.promotion_t LIMIT 5"
+→ Returns results in JSON format
+```
+
+#### 3. Natural Language Queries
+```
+AI: "How many active promotions are there for Sweden?"
+→ Converts to SQL and executes: finds active promotions for SE market
+
+AI: "Show me all promotion types in the database"
+→ Automatically generates and runs appropriate SQL query
+```
+
+#### 4. AI-Generated SQL
+```
+AI: "Generate SQL to find all promotions that expire in the next 7 days"
+→ Creates appropriate SQL query with explanation and executes it
+```
+
+### Supported Output Formats
+- **table** (default) - Formatted table output
+- **json** - JSON array format
+- **csv** - Comma-separated values
+
+### Database Features
+- **Schema Discovery** - Automatically discover all schemas, tables, and columns
+- **Multiple Output Formats** - Table, JSON, or CSV output
+- **Natural Language Processing** - Convert questions to SQL queries
+- **Google Cloud SQL Support** - Native support for Cloud SQL with private IP
+- **Connection Pooling** - Efficient database connection management
+- **Error Handling** - Comprehensive error handling and reporting
 
 ## 📋 Prerequisites
 
@@ -42,17 +122,35 @@ npm test
 
 ## 🧪 Testing
 
-The project includes a test client that verifies all functionality:
+The project includes multiple test clients for different functionality:
 
+### Basic Functionality Test
 ```bash
 npm test
 ```
+This runs the basic MCP server functionality tests.
 
+### Database Connection Test
+```bash
+node test-direct-db.js
+```
 This will:
-- Build the server
-- Start a test client
-- Test all tools and resources
-- Display results
+- Test direct database connection
+- Display database configuration
+- List all schemas in the database
+- Show tables in the public schema
+
+### Database Schema Test
+```bash
+node test-db-schema.js
+```
+Tests the MCP server's database schema tools.
+
+### Schema Count Utility
+```bash
+node get-schema-count.js
+```
+Quickly get the count of schemas in your database.
 
 ## 🔧 VS Code Integration
 
@@ -92,6 +190,7 @@ The `.vscode/mcp.json` file configures the server for VS Code MCP support.
 
 Once connected to an MCP client, you can:
 
+### Basic Tools
 ```
 AI: "What time is it?"
 → Server returns current time
@@ -103,19 +202,42 @@ AI: "What can this server do?"
 → Server provides information from server_info resource
 ```
 
+### Database Queries
+```
+AI: "Get the database schema"
+→ Returns all database schemas and tables
+
+AI: "How many schemas are in the database?"
+→ Executes: SELECT schema_name FROM information_schema.schemata
+
+AI: "Find all active promotions for Sweden"
+→ Generates and executes SQL to find SE market promotions
+
+AI: "Show me the structure of the promotions table"
+→ Returns detailed column information for promotions.promotion_t
+
+AI: "Execute SQL: SELECT COUNT(*) FROM promotions.promotion_t"
+→ Directly executes the SQL query and returns results
+```
+
 ## 📁 Project Structure
 
 ```
 mcp-test/
-├── .vscode/           # VS Code configuration
-│   ├── mcp.json      # MCP server config
-│   ├── tasks.json    # Build tasks
-│   └── launch.json   # Debug config
+├── .vscode/              # VS Code configuration
+│   ├── mcp.json         # MCP server config
+│   ├── tasks.json       # Build tasks
+│   └── launch.json      # Debug config
 ├── src/
-│   └── index.ts      # Main server code
+│   └── index.ts         # Main server code with database integration
 ├── build/
-│   └── index.js      # Compiled output
-├── test-client.js    # Test client
+│   └── index.js         # Compiled output
+├── test-client.js       # Test client for basic tools
+├── test-direct-db.js    # Direct database connection test
+├── test-db-schema.js    # Database schema testing
+├── test-schema.js       # Schema validation tests
+├── get-schema-count.js  # Schema counting utility
+├── .env                 # Database configuration (create from .env.example)
 ├── package.json
 ├── tsconfig.json
 └── README.md

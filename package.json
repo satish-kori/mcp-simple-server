@@ -10,16 +10,24 @@
     "test": "npm run build && node test-client.js",
     "test:server": "node test-client.js"
   },
-  "keywords": ["mcp", "server"],
+  "keywords": [
+    "mcp",
+    "server"
+  ],
   "author": "",
   "license": "ISC",
   "description": "A simple MCP server example",
   "dependencies": {
+    "@google-cloud/cloud-sql-connector": "^1.8.3",
     "@modelcontextprotocol/sdk": "^1.17.4",
+    "dotenv": "^17.2.1",
+    "openai": "^5.16.0",
+    "pg": "^8.16.3",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
+    "@types/pg": "^8.15.5",
     "typescript": "^5.9.2"
   }
 }
