@@ -8,7 +8,7 @@ async function getPostgreSQLSchemas() {
 
   const transport = new StdioClientTransport({
     command: "node",
-    args: ["build/index.js"],
+    args: ["build/main.js"],
     cwd: process.cwd()
   });
 

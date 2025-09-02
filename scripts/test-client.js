@@ -9,7 +9,7 @@ async function testMCPServer() {
   // Create MCP client with stdio transport
   const transport = new StdioClientTransport({
     command: "node",
-    args: ["build/index.js"],
+    args: ["build/main.js"],
     cwd: process.cwd()
   });
 
