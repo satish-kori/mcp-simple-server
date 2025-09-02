@@ -19,11 +19,14 @@
     "mcp",
     "server",
     "database",
-    "postgresql"
+    "postgresql",
+    "sql",
+    "assistant",
+    "model-context-protocol"
   ],
   "author": "",
   "license": "ISC",
-  "description": "A comprehensive MCP server with database integration",
+  "description": "A PostgreSQL MCP server for database operations, schema inspection, and SQL query execution with natural language support",
   "dependencies": {
     "@google-cloud/cloud-sql-connector": "^1.8.3",
     "@modelcontextprotocol/sdk": "^1.17.4",

@@ -5,9 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import pkg from "../package.json" with { type: "json" };
 
-// Import tool functions
-import { calculate } from "./tools/calculator.js";
-import { getCurrentTime } from "./tools/time.js";
+// Import database tool functions
 import { 
   getDatabaseSchema,
   executeSqlQuery,
@@ -18,13 +16,14 @@ import {
 import { DatabaseManager } from "./database/manager.js";
 
 /**
- * MCP Server for Simple Demo with Database Integration
+ * PostgreSQL MCP Server
  * 
- * This server provides:
- * - Basic utilities (time, calculator)
- * - Database operations (schema inspection, query execution)
+ * This server provides comprehensive PostgreSQL database integration:
+ * - Database schema inspection and analysis
+ * - SQL query execution with multiple output formats
+ * - AI-generated SQL query execution
  * - Natural language to SQL conversion
- * - Multiple output formats (table, JSON, CSV)
+ * - Support for multiple schemas and complex queries
  */
 
 // Create server instance
@@ -36,50 +35,12 @@ const server = new McpServer(
   {
     capabilities: {
       tools: {},
-      resources: {},
     },
   }
 );
 
 // Initialize database connection
 const dbManager = DatabaseManager.getInstance();
-
-// Register basic tools
-server.tool("get_current_time", {
-  timezone: z.string().optional().describe("Timezone (optional, defaults to local)")
-}, {
-  title: "Get Current Time",
-  description: "Get the current date and time with optional timezone support"
-}, async (args) => {
-  const result = getCurrentTime({ timezone: args.timezone });
-  return {
-    content: [{
-      type: "text",
-      text: result
-    }]
-  };
-});
-
-server.tool("calculate", {
-  operation: z.enum(["add", "subtract", "multiply", "divide"]).describe("The mathematical operation to perform"),
-  a: z.number().describe("First number"),
-  b: z.number().describe("Second number")
-}, {
-  title: "Calculate",
-  description: "Perform basic mathematical operations (add, subtract, multiply, divide)"
-}, async (args) => {
-  const result = calculate({ 
-    operation: args.operation,
-    a: args.a,
-    b: args.b
-  });
-  return {
-    content: [{
-      type: "text",
-      text: result
-    }]
-  };
-});
 
 // Register database tools
 server.tool("get_database_schema", {
@@ -160,47 +121,6 @@ server.tool("natural_language_query", {
   };
 });
 
-// Register resources
-server.resource(
-  "server_info",
-  "server://info",
-  {
-    name: "Server Information",
-    description: "Information about the MCP server and its capabilities",
-    mimeType: "text/plain"
-  },
-  async () => {
-    const isDbConnected = dbManager.isConnected();
-    return {
-      contents: [{
-        text: `Simple Demo MCP Server
-Version: ${pkg.version}
-Status: Running
-Database Connected: ${isDbConnected}
-
-Available Tools:
-- get_current_time: Get current date/time with timezone support
-- calculate: Basic mathematical operations
-- get_database_schema: Database schema information
-- execute_sql_query: Execute SQL queries with various output formats
-- execute_ai_generated_sql: Execute AI-generated SQL with explanations
-- natural_language_query: Convert natural language to SQL queries
-
-Database Features:
-- PostgreSQL/Google Cloud SQL support
-- Multiple output formats (table, JSON, CSV)
-- Schema discovery and exploration
-- Safe query execution (SELECT only)
-- Connection pooling and error handling
-
-This server demonstrates the Model Context Protocol (MCP) with database integration capabilities.`,
-        uri: "server://info",
-        mimeType: "text/plain"
-      }]
-    };
-  }
-);
-
 // Error handling
 process.on('SIGINT', async () => {
   console.log('\nShutting down MCP server...');
@@ -218,7 +138,7 @@ process.on('SIGTERM', async () => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Simple Demo MCP Server running on stdio");
+  console.error("PostgreSQL MCP Server running on stdio");
 }
 
 main().catch((error) => {

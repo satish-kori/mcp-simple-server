@@ -30,39 +30,26 @@ async function testMCPServer() {
     const tools = await client.listTools();
     console.log("Available tools:", tools.tools.map(t => t.name));
 
-    // Test 2: Test get_current_time tool
-    console.log("\n⏰ Testing get_current_time tool...");
-    const timeResult = await client.callTool({
-      name: "get_current_time",
+    // Test 2: Test database schema tool
+    console.log("\n🗄️ Testing database schema tool...");
+    const schemaResult = await client.callTool({
+      name: "get_database_schema",
       arguments: {}
     });
-    console.log("Time result:", timeResult.content[0].text);
+    console.log("Database schema preview:", schemaResult.content[0].text.substring(0, 200) + "...");
 
-    // Test 3: Test calculator tool
-    console.log("\n🧮 Testing calculator tool...");
-    const calcResult = await client.callTool({
-      name: "calculate",
+    // Test 3: Test SQL query execution
+    console.log("\n🔍 Testing SQL query execution...");
+    const queryResult = await client.callTool({
+      name: "execute_sql_query",
       arguments: {
-        operation: "add",
-        a: 15,
-        b: 23
+        query: "SELECT COUNT(*) as total_schemas FROM information_schema.schemata",
+        format: "table"
       }
     });
-    console.log("Calculation result:", calcResult.content[0].text);
+    console.log("Query result:", queryResult.content[0].text);
 
-    // Test 4: List resources
-    console.log("\n📚 Testing resources list...");
-    const resources = await client.listResources();
-    console.log("Available resources:", resources.resources.map(r => r.name));
-
-    // Test 5: Read server info resource
-    console.log("\n📖 Testing server info resource...");
-    const resourceResult = await client.readResource({
-      uri: "server://info"
-    });
-    console.log("Server info preview:", resourceResult.contents[0].text.substring(0, 100) + "...");
-
-    console.log("\n🎉 All tests passed! Your MCP server is working correctly!");
+    console.log("\n🎉 All database tests passed! Your PostgreSQL MCP server is working correctly!");
 
   } catch (error) {
     console.error("❌ Test failed:", error);
