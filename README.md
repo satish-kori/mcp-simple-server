@@ -129,7 +129,7 @@ npm install
 2. **Configure environment:**
 ```bash
 # Create .env file with your database configuration
-cp .env.example .env
+touch .env
 # Edit .env with your PostgreSQL connection details
 ```
 
@@ -157,14 +157,21 @@ Create a `.env` file with your database connection details:
 
 ```env
 # PostgreSQL Configuration
-PGHOST=your-host
-PGPORT=5432
-PGDATABASE=your-database
-PGUSER=your-username
-PGPASSWORD=your-password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=your-database-name
+DB_USER=your-username
+DB_PASSWORD=your-password
 
-# Optional: Google Cloud SQL specific
-CLOUD_SQL_CONNECTION_NAME=your-project:region:instance
+# Connection Pool Settings
+DB_MAX_CONNECTIONS=5
+
+# SSL Configuration (recommended for production)
+DB_SSL=false
+
+# Google Cloud SQL Configuration (optional)
+INSTANCE_CONNECTION_NAME=your-project:region:instance-name
+GOOGLE_CLOUD_PROJECT=your-project-id
 ```
 
 ## 🧪 Testing
@@ -283,7 +290,7 @@ mcp-test/
 │   ├── test-direct-db.js    # Database connection test
 │   ├── test-db-schema.js    # Database schema testing
 │   └── test-client.js   # MCP client testing
-├── .env                 # Environment variables (create from .env.example)
+├── .env                 # Environment variables (create from template above)
 ├── Dockerfile          # Docker configuration
 ├── package.json
 ├── tsconfig.json
@@ -344,14 +351,21 @@ Create a `.env` file with your database connection details:
 
 ```env
 # PostgreSQL Configuration
-PGHOST=your-host
-PGPORT=5432
-PGDATABASE=your-database
-PGUSER=your-username
-PGPASSWORD=your-password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=your-database-name
+DB_USER=your-username
+DB_PASSWORD=your-password
 
-# Optional: Google Cloud SQL specific
-CLOUD_SQL_CONNECTION_NAME=your-project:region:instance
+# Connection Pool Settings
+DB_MAX_CONNECTIONS=5
+
+# SSL Configuration (recommended for production)
+DB_SSL=false
+
+# Google Cloud SQL Configuration (optional)
+INSTANCE_CONNECTION_NAME=your-project:region:instance-name
+GOOGLE_CLOUD_PROJECT=your-project-id
 ```
 
 ### Docker Support
