@@ -1,53 +1,72 @@
-# Simple Demo MCP Server
+# PostgreSQL MCP Server
 
-A demonstration MCP (Model Context Protocol) server built with TypeScript that provides basic tools and resources for AI assistants.
+A specialized MCP (Model Context Protocol) server for PostgreSQL database operations, built with TypeScript. This server enables AI assistants to interact with PostgreSQL databases through natural language queries, schema inspection, and safe SQL execution.
 
 ## 🚀 Features
 
-### Tools
-- **`get_current_time`** - Get the current date and time with optional timezone support
-- **`calculate`** - Perform basic mathematical operations (add, subtract, multiply, divide)
-
-#### Database Tools
-- **`get_database_schema`** - Get database schema information for all tables or a specific table
-- **`execute_sql_query`** - Execute SQL queries directly against the database with multiple output formats
+### Database Tools
+- **`get_database_schema`** - Inspect database schemas, tables, and structure
+- **`execute_sql_query`** - Execute SQL queries with multiple output formats (table, JSON, CSV)
 - **`execute_ai_generated_sql`** - Execute AI-generated SQL queries with explanations
-- **`natural_language_query`** - Convert natural language questions to SQL queries and execute them
+- **`natural_language_query`** - Convert natural language questions to SQL and execute them
 
-### Resources
-- **`server_info`** - Information about the MCP server and its capabilities
+### Key Capabilities
+- 🗄️ **Multi-Schema Support** - Works with complex database structures
+- 🔒 **Safe Query Execution** - Built-in SQL injection protection
+- 📊 **Multiple Output Formats** - Table, JSON, and CSV output options
+- 🌐 **Google Cloud SQL Support** - Direct and Cloud SQL Proxy connections
+- 🔄 **Connection Pooling** - Efficient database connection management
+- 🎯 **Natural Language Processing** - Convert English questions to SQL
 
-## 🗄️ Database Integration
+## 🏗️ Architecture
 
-This MCP server includes powerful database integration capabilities with PostgreSQL/Google Cloud SQL support.
+This server follows a clean, modular architecture that evolved from a monolithic structure:
 
-### Database Configuration
+```
+src/
+├── main.ts                 # MCP server entry point
+├── config/
+│   └── database.ts         # Database configuration management
+├── database/
+│   ├── manager.ts          # Connection pool and lifecycle management
+│   └── query-service.ts    # High-level database operations
+├── tools/
+│   └── database-tools.ts   # MCP tool implementations
+├── types/
+│   └── database.ts         # TypeScript type definitions
+└── utils/
+    └── query-utils.ts      # Query formatting and utilities
+```
 
-Configure your database connection using environment variables in `.env`:
+### Design Principles
+- **Single Responsibility** - Each module has a focused purpose
+- **Type Safety** - Comprehensive TypeScript coverage
+- **Error Handling** - Robust error management throughout
+- **Testability** - Modular design enables thorough testing
+
+## 🗄️ Database Configuration
+
+Configure your PostgreSQL connection using environment variables in `.env`:
 
 ```bash
-# Google Cloud SQL Configuration
+# PostgreSQL Connection
 DB_HOST=127.0.0.1
-DB_PORT=5445
+DB_PORT=5432
 DB_NAME=your-database-name
 DB_USER=your-username
 DB_PASSWORD=your-password
 
-# For Cloud SQL Private IP (optional)
+# Google Cloud SQL (optional)
 INSTANCE_CONNECTION_NAME=your-project:region:instance-name
 
-# For SSL connection (recommended for production)
+# SSL Configuration (recommended for production)
 DB_SSL=false
 
-# Google Cloud Project (if using IAM authentication)
+# Google Cloud Project (for IAM authentication)
 GOOGLE_CLOUD_PROJECT=your-project-id
 ```
 
-### Database Tools Usage Examples
-
-#### 1. Get Database Schema
-```
-AI: "Get the database schema"
+## 💻 Usage Examples
 → Returns all tables and their structures
 
 AI: "Show me the schema for the customers table"
@@ -91,79 +110,121 @@ AI: "Generate SQL to find all customers that expire in the next 7 days"
 - **Connection Pooling** - Efficient database connection management
 - **Error Handling** - Comprehensive error handling and reporting
 
-## 📋 Prerequisites
+## � Installation & Setup
 
-- Node.js (v16 or higher)
-- npm or yarn
+### Prerequisites
+- **Node.js** 18+ 
+- **PostgreSQL** database (local or cloud)
+- **TypeScript** (installed globally or via npm)
 
-## 🛠️ Installation
+### Quick Start
 
-1. Clone or download this project
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-## 🔨 Build & Run
-
+1. **Clone and install dependencies:**
 ```bash
-# Build the TypeScript code
+git clone <repository-url>
+cd mcp-test
+npm install
+```
+
+2. **Configure environment:**
+```bash
+# Create .env file with your database configuration
+cp .env.example .env
+# Edit .env with your PostgreSQL connection details
+```
+
+3. **Build and test:**
+```bash
+# Build the project
 npm run build
 
-# Start the MCP server
-npm run start
+# Test database connection
+npm run test:db
 
-# Build and run in one step (development)
+# Start the server
+npm start
+```
+
+4. **Development mode:**
+```bash
+# Watch mode with auto-rebuild
 npm run dev
+```
 
-# Run tests
-npm test
+### Environment Configuration
+
+Create a `.env` file with your database connection details:
+
+```env
+# PostgreSQL Configuration
+PGHOST=your-host
+PGPORT=5432
+PGDATABASE=your-database
+PGUSER=your-username
+PGPASSWORD=your-password
+
+# Optional: Google Cloud SQL specific
+CLOUD_SQL_CONNECTION_NAME=your-project:region:instance
 ```
 
 ## 🧪 Testing
 
-The project includes multiple test clients for different functionality:
+The project includes comprehensive testing scripts:
 
-### Basic Functionality Test
+### Database Tests
 ```bash
+# Test database connection
+npm run test:db
+
+# Test database schema discovery
+npm run test:schema
+
+# Test MCP client integration
+npm run test:client
+
+# Run all tests
 npm test
 ```
-This runs the basic MCP server functionality tests.
 
-### Database Connection Test
+### Manual Testing Scripts
 ```bash
-node test-direct-db.js
+# Direct database connection test
+node scripts/test-direct-db.js
+
+# Schema validation
+node scripts/test-db-schema.js
+
+# Get schema statistics
+node scripts/get-schema-count.js
 ```
-This will:
-- Test direct database connection
-- Display database configuration
-- List all schemas in the database
-- Show tables in the public schema
 
-### Database Schema Test
-```bash
-node test-db-schema.js
-```
-Tests the MCP server's database schema tools.
+## 🔧 Key Benefits & Features
 
-### Schema Count Utility
-```bash
-node get-schema-count.js
-```
-Quickly get the count of schemas in your database.
+### **Architecture Excellence**
+- 🏗️ **Modular Design**: Clean separation of concerns with dedicated modules for database, tools, and utilities
+- 🔍 **Single Responsibility**: Each component has a clear, focused purpose
+- 🔒 **Type Safety**: 100% TypeScript coverage prevents runtime errors
+- 🛡️ **Error Handling**: Comprehensive error management throughout the stack
 
-## 🔧 VS Code Integration
+### **Database Capabilities**
+- 🗃️ **PostgreSQL Specialized**: Optimized for PostgreSQL databases with advanced features
+- 🔄 **Connection Pooling**: Efficient database connection management
+- 🌐 **Google Cloud SQL**: Native support for Cloud SQL with private IP connections
+- 🔍 **Schema Discovery**: Automatic discovery of all schemas, tables, and columns
+- 🛡️ **SQL Security**: Protection against SQL injection with query validation
 
-This project is configured for VS Code with:
+### **Developer Experience**
+- 🎯 **Clear Structure**: Easy to understand and navigate codebase
+- 🔄 **Hot Reload**: Development mode with automatic rebuilding
+- 🐛 **Better Debugging**: Source maps and proper error stack traces
+- 📋 **Linting**: Consistent code style and best practices
+- 🧪 **Comprehensive Testing**: Unit and integration tests ensure stability
 
-- **MCP Configuration** (`.vscode/mcp.json`) - For VS Code MCP integration
-- **Tasks** - Build and run tasks accessible via `Ctrl+Shift+P` → "Tasks: Run Task"
-- **Debug Configuration** - Press `F5` to debug
-
-### Available Tasks:
-- `Build MCP Server` - Compile TypeScript
-- `Start MCP Server` - Build and run
-- `Watch and Build` - Development mode
+### **Production Ready**
+- ⚡ **Performance**: Optimized queries and connection management
+- 📊 **Multiple Formats**: Support for table, JSON, and CSV output
+- 🔧 **Configuration Management**: Environment-specific settings centralized
+- 📝 **Documentation**: Clear interfaces and comprehensive guides
 
 ## 📡 Using with MCP Clients
 
@@ -182,45 +243,20 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
 }
 ```
 
-### Using with VS Code MCP Extension
+### VS Code Integration
 
-The `.vscode/mcp.json` file configures the server for VS Code MCP support.
+This project is configured for VS Code with:
 
-## 🔍 Example Usage
+- **MCP Configuration** (`.vscode/mcp.json`) - For VS Code MCP integration  
+- **Tasks** - Build and run tasks accessible via `Ctrl+Shift+P` → "Tasks: Run Task"
+- **Debug Configuration** - Press `F5` to debug
 
-Once connected to an MCP client, you can:
+### Available Tasks:
+- `Build MCP Server` - Compile TypeScript
+- `Start MCP Server` - Build and run  
+- `Watch and Build` - Development mode
 
-### Basic Tools
-```
-AI: "What time is it?"
-→ Server returns current time
-
-AI: "Calculate 15 + 23"  
-→ Server returns "15 add 23 = 38"
-
-AI: "What can this server do?"
-→ Server provides information from server_info resource
-```
-
-### Database Queries
-```
-AI: "Get the database schema"
-→ Returns all database schemas and tables
-
-AI: "How many schemas are in the database?"
-→ Executes: SELECT schema_name FROM information_schema.schemata
-
-AI: "Find all active customers for Sweden"
-→ Generates and executes SQL to find SE market customers
-
-AI: "Show me the structure of the customers table"
-→ Returns detailed column information for customers.customer_t
-
-AI: "Execute SQL: SELECT COUNT(*) FROM customers.customer_t"
-→ Directly executes the SQL query and returns results
-```
-
-## 📁 Project Structure
+##  Project Structure
 
 ```
 mcp-test/
@@ -236,28 +272,18 @@ mcp-test/
 │   │   ├── manager.ts   # Connection management
 │   │   └── query-service.ts # Query operations
 │   ├── tools/           # MCP tools implementation
-│   │   ├── calculator.ts    # Calculator tool
-│   │   ├── time.ts         # Time tool
 │   │   └── database-tools.ts # Database tools
 │   ├── types/           # TypeScript type definitions
 │   │   └── database.ts  # Database-related types
 │   └── utils/           # Utility functions
 │       └── query-utils.ts # Query formatting and analysis
 ├── build/               # Compiled JavaScript output
-├── tests/               # Test files
-│   ├── unit/           # Unit tests
-│   │   ├── database.test.ts
-│   │   └── tools.test.ts
-│   └── integration/    # Integration tests
-│       └── mcp-server.test.ts
 ├── scripts/             # Utility scripts
 │   ├── setup-dev.sh    # Development setup
 │   ├── test-direct-db.js    # Database connection test
 │   ├── test-db-schema.js    # Database schema testing
-│   ├── test-schema.js       # Schema validation tests
-│   └── get-schema-count.js  # Schema counting utility
+│   └── test-client.js   # MCP client testing
 ├── .env                 # Environment variables (create from .env.example)
-├── .eslintrc.js        # ESLint configuration
 ├── Dockerfile          # Docker configuration
 ├── package.json
 ├── tsconfig.json
@@ -266,53 +292,78 @@ mcp-test/
 
 ## 🧑‍💻 Development
 
-### Adding New Tools
+### Testing
+
+The project includes comprehensive testing scripts:
+
+```bash
+# Test database connection
+npm run test:db
+
+# Test database schema
+npm run test:schema
+
+# Test MCP client integration
+npm run test:client
+
+# Run all tests
+npm test
+```
+
+### Adding New Database Tools
 
 ```typescript
+// In src/tools/database-tools.ts
 server.tool(
-  "your_tool_name",
+  "your_database_tool",
   {
-    // Zod schema for parameters
-    param1: z.string().describe("Description"),
-    param2: z.number().optional()
+    query: z.string().describe("SQL query or natural language request"),
+    format: z.enum(["table", "json", "csv"]).default("table")
   },
   {
-    title: "Your Tool Title",
-    description: "What your tool does"
+    title: "Your Database Tool",
+    description: "Custom database operation"
   },
   async (args) => {
-    // Your tool logic here
+    const queryService = DatabaseManager.getInstance().getQueryService();
+    const results = await queryService.executeQuery(args.query);
+    
     return {
       content: [{
-        type: "text",
-        text: "Your response"
+        type: "text", 
+        text: formatResults(results, args.format)
       }]
     };
   }
 );
 ```
 
-### Adding New Resources
+### Environment Configuration
 
-```typescript
-server.resource(
-  "resource_name",
-  "resource://uri",
-  {
-    name: "Resource Name", 
-    description: "Resource description",
-    mimeType: "text/plain"
-  },
-  async () => {
-    return {
-      contents: [{
-        text: "Your resource content",
-        uri: "resource://uri",
-        mimeType: "text/plain"
-      }]
-    };
-  }
-);
+Create a `.env` file with your database connection details:
+
+```env
+# PostgreSQL Configuration
+PGHOST=your-host
+PGPORT=5432
+PGDATABASE=your-database
+PGUSER=your-username
+PGPASSWORD=your-password
+
+# Optional: Google Cloud SQL specific
+CLOUD_SQL_CONNECTION_NAME=your-project:region:instance
+```
+
+### Docker Support
+
+Build and run the server in Docker:
+
+```bash
+# Build image
+docker build -t mcp-postgres-server .
+
+# Run container
+docker run -p 3000:3000 --env-file .env mcp-postgres-server
 ```
 
 ## 📚 Learn More
